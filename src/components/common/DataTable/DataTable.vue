@@ -33,6 +33,8 @@ const attrs = useAttrs()
 
 const slots = useSlots()
 
+const { t } = useI18n()
+
 const currencyType = computed(() => currenciesName[props.currency as Currencies])
 
 const getFormattedData = (data: Ref<Deal[]>, field: string, type?: FormatType) => {
@@ -88,7 +90,7 @@ const maxDate = new Date()
           :sortable
           :key="field"
           :field
-          :header="`${$t(header)} ${tableCurrency(type as FormatType)}`"
+          :header="`${t(header)} ${tableCurrency(type as FormatType)}`"
         >
           <template #body="{ data, field, index }">
             <div
@@ -121,7 +123,7 @@ const maxDate = new Date()
           </template>
         </Column>
 
-        <template #empty>{{ $t('table.empty') }}</template>
+        <template #empty>{{ t('table.empty') }}</template>
       </DataTable>
       <slot name="addRow" />
     </template>

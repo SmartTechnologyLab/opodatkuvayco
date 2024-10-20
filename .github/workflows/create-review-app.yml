@@ -1,0 +1,104 @@
+name: Create Review App
+
+on:
+  pull_request:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
+
+  build_and_deploy_storybook:
+    if: '!contains(github.event.pull_request.title, ''SKIP REVIEW'')'
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
+      - name: Build Storybook
+        run: npm run build-storybook
+      - name: Create remote directory for Storybook
+        run: |
+          ssh -i ${{ secrets.DEV_REMOTE_KEY }} ${{ secrets.DEV_REMOTE_USER }}@${{ secrets.DEV_REMOTE_HOST }} "mkdir -p ${{ secrets.DEV_STORYBOOK_PATH }}/${{ github.head_ref }}"
+      - name: rsync deploy storybook
+        uses: burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avzr --delete
+          path: ./storybook-static
+          remote_host: ${{ secrets.DEV_REMOTE_HOST }}
+          remote_user: ${{ secrets.DEV_REMOTE_USER }}
+          remote_key: ${{ secrets.DEV_REMOTE_KEY }}
+          remote_path: ${{ secrets.DEV_STORYBOOK_PATH }}/${{ github.head_ref }}
+      - name: Post review storybook URL
+        if: success()
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: Created new review app at ${{ env.REVIEW_APP_URL }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+        env: 
+          REVIEW_APP_URL: "https://${{ secrets.DEV_REMOTE_HOST }}/${{ github.head_ref }}/storybook"
+
+  build_and_deploy_project:
+    if: '!contains(github.event.pull_request.title, ''SKIP REVIEW'')'
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
+      - name: Build Project
+        run: npm run build
+      - name: Create remote directory for Project
+        run: |
+          ssh -i ${{ secrets.DEV_REMOTE_KEY }} ${{ secrets.DEV_REMOTE_USER }}@${{ secrets.DEV_REMOTE_HOST }} "mkdir -p ${{ secrets.DEV_REMOTE_PATH }}/${{ github.head_ref }}"
+      - name: rsync deploy project
+        uses: burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avzr --delete
+          path: ./dist
+          remote_host: ${{ secrets.DEV_REMOTE_HOST }}
+          remote_user: ${{ secrets.DEV_REMOTE_USER }}
+          remote_key: ${{ secrets.DEV_REMOTE_KEY }}
+          remote_path: ${{ secrets.DEV_REMOTE_PATH }}/${{ github.head_ref }}
+      - name: Post review app URL
+        if: success()
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: Created new review app at ${{ env.REVIEW_APP_URL }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+        env: 
+          REVIEW_APP_URL: "https://${{ secrets.DEV_REMOTE_HOST }}/${{ github.head_ref }}"

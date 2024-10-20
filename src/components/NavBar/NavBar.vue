@@ -8,7 +8,7 @@ const { t } = useI18n()
 
 <template>
   <nav class="nav-bar">
-    <UiImage :src="logo" :alt="$t('navBar.logo-alt')" class="nav-bar__logo" />
+    <UiImage :src="logo" :alt="t('navBar.logo-alt')" class="nav-bar__logo" />
 
     <h1 class="nav-bar__title">
       {{ t('navBar.companyName') }}

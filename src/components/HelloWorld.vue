@@ -7,7 +7,7 @@ const { t, d, n } = useI18n()
 </script>
 
 <template>
-  <div>{{ $t('main.hello') }}</div>
+  <div>{{ t('main.hello') }}</div>
   <div>{{ t('main.dollar', { n: 2 }) }}</div>
   <div>{{ t('main.dollar', { n: 0 }) }}</div>
   <div>{{ t('main.dollar', { n: 100 }) }}</div>
