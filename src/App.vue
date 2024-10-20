@@ -2,7 +2,7 @@
 import { RouterView, useRoute } from 'vue-router'
 import NavBar from '@/components/NavBar/NavBar.vue'
 import { computed } from 'vue'
-import { routesWithoutNavBar } from '@/router/common/routesWithoutNavBar.ts'
+import { routesWithoutNavBar } from '@/router/common/routesWithoutNavBar'
 
 const route = useRoute()
 
@@ -14,4 +14,4 @@ const showNavBar = computed(() => !routesWithoutNavBar.includes(route.path))
   <RouterView />
 </template>
 
-<style scoped></style>
+<style scoped lang="scss"></style>

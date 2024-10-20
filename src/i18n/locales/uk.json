@@ -23,5 +23,11 @@
   "navBar": {
     "companyName": "Оподаткувайко",
     "logo-alt": "Логотип Оподаткувайко"
+  },
+  "registration": {
+    "userName": "Імʼя користувача",
+    "userPassword": "Пароль",
+    "submitBtn": "Продовжити",
+    "googleIcon": "Авторизація з Google"
   }
 }
