@@ -1,10 +1,13 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import UiLoader from '@/components/common/UiLoader/UiLoader.vue'
+</script>
 
 <template>
   <Suspense>
     <div>Register page</div>
 
-    <!-- ToDo: add spinner for loading state -->
-    <template #fallback> Loading... </template>
+    <template #fallback>
+      <UiLoader />
+    </template>
   </Suspense>
 </template>

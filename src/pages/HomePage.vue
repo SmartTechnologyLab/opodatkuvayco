@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import TaxCalculator from '@/components/common/TaxCalculator/TaxCalculator.vue'
 import UiButton from '@/components/common/UiButton/UiButton.vue'
+import UiLoader from '@/components/common/UiLoader/UiLoader.vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -24,8 +25,10 @@ const { t } = useI18n()
 
       <TaxCalculator />
     </main>
-    <!-- ToDo: add spinner for loading state -->
-    <template #fallback> Loading... </template>
+
+    <template #fallback>
+      <UiLoader />
+    </template>
   </Suspense>
 </template>
 
