@@ -1,9 +1,27 @@
-$main-background-color: #3c9ea3;
+$main-background-color: #f0f2f5;
+$main-text-color: #333;
+$body-background: #ffffff;
+$secondary-text-color: #6c757d;
+$secondary-background: #e9ecef;
 
-$main-text-color: #fff;
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$success-color: #28a745;
+$info-color: #17a2b8;
+$warning-color: #ffc107;
+$danger-color: #dc3545;
+$light-color: #f8f9fa;
+$dark-color: #343a40;
 
-$body-background: #29445d;
+$font-family-base: 'Roboto', sans-serif;
+$font-size-base: 1rem;
+$font-weight-base: 400;
+$line-height-base: 1.5;
 
-$secondary-text-color: #a0a0a0;
+$border-radius-base: 0.25rem;
+$border-radius-lg: 0.3rem;
+$border-radius-sm: 0.2rem;
 
-$secondary-background: #95a9ab;
+$box-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+$box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+$box-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
